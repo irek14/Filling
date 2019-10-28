@@ -38,7 +38,7 @@
             // 
             this.MainTable.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.MainTable.ColumnCount = 2;
-            this.MainTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
+            this.MainTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.MainTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1437F));
             this.MainTable.Controls.Add(this.Photo, 1, 0);
             this.MainTable.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -46,15 +46,15 @@
             this.MainTable.Name = "MainTable";
             this.MainTable.RowCount = 1;
             this.MainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.MainTable.Size = new System.Drawing.Size(1584, 857);
+            this.MainTable.Size = new System.Drawing.Size(1662, 901);
             this.MainTable.TabIndex = 0;
             // 
             // Photo
             // 
             this.Photo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Photo.Location = new System.Drawing.Point(303, 3);
+            this.Photo.Location = new System.Drawing.Point(228, 3);
             this.Photo.Name = "Photo";
-            this.Photo.Size = new System.Drawing.Size(1431, 851);
+            this.Photo.Size = new System.Drawing.Size(1431, 895);
             this.Photo.TabIndex = 0;
             this.Photo.TabStop = false;
             this.Photo.Paint += new System.Windows.Forms.PaintEventHandler(this.Photo_Paint);
@@ -63,10 +63,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1584, 857);
+            this.ClientSize = new System.Drawing.Size(1662, 901);
             this.Controls.Add(this.MainTable);
-            this.MaximumSize = new System.Drawing.Size(1600, 896);
-            this.MinimumSize = new System.Drawing.Size(1600, 896);
+            this.MaximumSize = new System.Drawing.Size(1700, 940);
+            this.MinimumSize = new System.Drawing.Size(1678, 940);
             this.Name = "MainForm";
             this.Text = "Filling editor";
             this.MainTable.ResumeLayout(false);
