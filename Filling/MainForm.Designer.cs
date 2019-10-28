@@ -58,6 +58,9 @@
             this.Photo.TabIndex = 0;
             this.Photo.TabStop = false;
             this.Photo.Paint += new System.Windows.Forms.PaintEventHandler(this.Photo_Paint);
+            this.Photo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Photo_MouseDown);
+            this.Photo.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Photo_MouseMove);
+            this.Photo.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Photo_MouseUp);
             // 
             // MainForm
             // 
