@@ -19,7 +19,7 @@ namespace Filling
         public MainForm()
         {
             InitializeComponent();
-            triangles = GenerateTriangles(6, 8);
+            triangles = GenerateTriangles(2, 2);
             Photo.Invalidate();
         }
 
@@ -28,14 +28,14 @@ namespace Filling
             Random rnd = new Random(1234);
 
             e.Graphics.DrawImage(Resources.spiderman, new Point(0,0));
-            DrawTrianglesNest(e.Graphics);
 
-            foreach(Triangle triangle in triangles)
+            foreach (Triangle triangle in triangles)
             {
                 Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
                 FillPolygon(triangle.GetEdges(), e.Graphics, randomColor);
             }
-            
+
+            DrawTrianglesNest(e.Graphics);
         }
 
         private List<Triangle> GenerateTriangles(int N, int M)
@@ -131,20 +131,21 @@ namespace Filling
 
             while(edgesCounter != 0 || AET.Any())
             {
-                if(ET[y] != null)
+                AET.RemoveAll(x => x.yMax == y);
+
+                if (ET[y] != null)
                 {
                     foreach(Edge edge in ET[y])
                     {
-                        double x = edge.p1.X < edge.p2.X ? edge.p1.X : edge.p2.X;
-                        double m = ((double)edge.p1.X - (double)edge.p2.X) / ((double)edge.p1.Y - (double)edge.p2.Y);
+                        double m = ((double)edge.p2.X - (double)edge.p1.X) / ((double)edge.p2.Y - (double)edge.p1.Y);
 
-                        if (!double.IsInfinity(m))
-                            AET.Add((edge.p2.Y, x, m));
+                        if (edge.p1.Y != edge.p2.Y)
+                            AET.Add((edge.p2.Y, edge.p1.X, m));
 
                         edgesCounter--;
                     }
                 }
-
+                
                 AET.Sort((a,b)=>a.xMin.CompareTo(b.xMin));
 
                 for(int i=0; i<AET.Count; i+=2)
@@ -155,7 +156,6 @@ namespace Filling
                     }
                 }
 
-                AET.RemoveAll(x => x.yMax == y);
                 y++;
 
                 for(int i=0; i<AET.Count; i++)
