@@ -25,8 +25,17 @@ namespace Filling
 
         private void Photo_Paint(object sender, PaintEventArgs e)
         {
+            Random rnd = new Random(1234);
+
             e.Graphics.DrawImage(Resources.spiderman, new Point(0,0));
             DrawTrianglesNest(e.Graphics);
+
+            foreach(Triangle triangle in triangles)
+            {
+                Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                FillPolygon(triangle.GetEdges(), e.Graphics, randomColor);
+            }
+            
         }
 
         private List<Triangle> GenerateTriangles(int N, int M)
@@ -110,6 +119,69 @@ namespace Filling
             isVertexMoving = false;
         }
 
+        private void FillPolygon(List<Edge> edges, Graphics graph, Color color)
+        {
+            List<Edge>[] ET = EdgeBucketSort(edges);
+            int edgesCounter = edges.Count;
+            int y = 0;
+            while (ET[y] == null)
+                y++;
 
+            List<(double yMax, double xMin, double m)> AET = new List<(double, double, double)>();
+
+            while(edgesCounter != 0 || AET.Any())
+            {
+                if(ET[y] != null)
+                {
+                    foreach(Edge edge in ET[y])
+                    {
+                        double x = edge.p1.X < edge.p2.X ? edge.p1.X : edge.p2.X;
+                        double m = ((double)edge.p1.X - (double)edge.p2.X) / ((double)edge.p1.Y - (double)edge.p2.Y);
+
+                        if (!double.IsInfinity(m))
+                            AET.Add((edge.p2.Y, x, m));
+
+                        edgesCounter--;
+                    }
+                }
+
+                AET.Sort((a,b)=>a.xMin.CompareTo(b.xMin));
+
+                for(int i=0; i<AET.Count; i+=2)
+                {
+                    for(int j=(int)(AET[i].xMin); j<(int)(AET[i+1].xMin); j++)
+                    {
+                        graph.FillRectangle(new SolidBrush(color), j, y, 1, 1);
+                    }
+                }
+
+                AET.RemoveAll(x => x.yMax == y);
+                y++;
+
+                for(int i=0; i<AET.Count; i++)
+                {
+                    AET[i] = (AET[i].yMax, AET[i].xMin + AET[i].m, AET[i].m);
+                }
+            }
+
+
+        }
+
+        private List<Edge>[] EdgeBucketSort(List<Edge> edges)
+        {
+            List<Edge>[] result = new List<Edge>[Photo.Height];
+
+            foreach(Edge edge in edges)
+            {
+                int index = edge.p1.Y < edge.p2.Y ? edge.p1.Y : edge.p2.Y;
+
+                if (result[index] == null)
+                    result[index] = new List<Edge>();
+
+                result[index].Add(edge);
+            }
+
+            return result;
+        }
     }
 }

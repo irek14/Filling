@@ -19,5 +19,16 @@ namespace Filling
             this.p2 = p2;
             this.p3 = p3;
         }
+
+        public List<Edge> GetEdges()
+        {
+            List<Edge> result = new List<Edge>();
+
+            result.Add(new Edge(p1, p2));
+            result.Add(new Edge(p1, p3));
+            result.Add(new Edge(p2, p3));
+
+            return result;
+        }
     }
 }
