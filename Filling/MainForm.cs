@@ -19,20 +19,17 @@ namespace Filling
         public MainForm()
         {
             InitializeComponent();
-            triangles = GenerateTriangles(2, 2);
+            triangles = GenerateTriangles(6, 8);
             Photo.Invalidate();
         }
 
         private void Photo_Paint(object sender, PaintEventArgs e)
         {
-            Random rnd = new Random(1234);
-
-            e.Graphics.DrawImage(Resources.spiderman, new Point(0,0));
+            e.Graphics.DrawImage(Resources.Volleyball, new Point(0,0));
 
             foreach (Triangle triangle in triangles)
             {
-                Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-                FillPolygon(triangle.GetEdges(), e.Graphics, randomColor);
+                FillPolygon(triangle.GetEdges(), e.Graphics, Resources.Volleyball, Resources.NormalMap);
             }
 
             DrawTrianglesNest(e.Graphics);
@@ -119,7 +116,7 @@ namespace Filling
             isVertexMoving = false;
         }
 
-        private void FillPolygon(List<Edge> edges, Graphics graph, Color color)
+        private void FillPolygon(List<Edge> edges, Graphics graph, Bitmap OriginalBitmap, Bitmap NormalMap)
         {
             List<Edge>[] ET = EdgeBucketSort(edges);
             int edgesCounter = edges.Count;
@@ -152,7 +149,18 @@ namespace Filling
                 {
                     for(int j=(int)(AET[i].xMin); j<(int)(AET[i+1].xMin); j++)
                     {
-                        graph.FillRectangle(new SolidBrush(color), j, y, 1, 1);
+                        Color objectColor = OriginalBitmap.GetPixel(j, y);
+                        Vector3D normalVector = FromNormalMapToVector(NormalMap.GetPixel(j,y));
+                        Vector3D normalVector2 = new Vector3D(0, 0, 1);
+                        int R = (int)GetLambertColor(0.5, 0.5, 1, objectColor.R, new Vector3D(0, 0, 1), normalVector, 5);
+                        int G = (int)GetLambertColor(0.5, 0.5, 1, objectColor.G, new Vector3D(0, 0, 1), normalVector, 5);
+                        int B = (int)GetLambertColor(0.5, 0.5, 1, objectColor.B, new Vector3D(0, 0, 1), normalVector, 5);
+
+                        FixRGB(ref R, ref G, ref B);
+
+                        Color newColor = Color.FromArgb(R, G, B);
+
+                        graph.FillRectangle(new SolidBrush(newColor), j, y, 1, 1);
                     }
                 }
 
@@ -182,6 +190,36 @@ namespace Filling
             }
 
             return result;
+        }
+
+        Vector3D DefaultLightColor = new Vector3D(1, 1, 1);
+
+        private double GetLambertColor(double kd, double ks, double lightColor, double objectColor, Vector3D L, Vector3D N, double m)
+        {
+            Vector3D V = new Vector3D(0, 0, 1);
+            Vector3D R = 2 * N - L;
+
+            double result = kd * lightColor * objectColor * (N * L) + ks * lightColor * objectColor * Math.Pow(V * R, m);
+
+            return result;
+        }
+
+        private Vector3D FromNormalMapToVector(Color color)
+        {
+            var result = new Vector3D(((double)color.R-127.0)/127.0, ((double)color.G - 127.0)/127.0,((double)color.B - 127.0)/127.0);
+            return result;
+        }
+
+        private void FixRGB(ref int R, ref int G, ref int B)
+        {
+            if (R > 255) R = 255;
+            else if (R < 0) R = 0;
+
+            if (G > 255) G = 255;
+            else if (G < 0) G = 0;
+
+            if (B > 255) B = 255;
+            else if (B < 0) B = 0;
         }
     }
 }
