@@ -15,6 +15,8 @@ namespace Filling
     {
         List<Triangle> triangles = null;
         bool isVertexMoving = false;
+        Color constColor = Color.White;
+        Color lightColor = Color.FromArgb(255, 255, 255);
 
         public MainForm()
         {
@@ -25,11 +27,11 @@ namespace Filling
 
         private void Photo_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(Resources.Volleyball, new Point(0,0));
+            e.Graphics.DrawImage(Resources.Spiderman, new Point(0,0));
 
             foreach (Triangle triangle in triangles)
             {
-                FillPolygon(triangle.GetEdges(), e.Graphics, Resources.Volleyball, Resources.NormalMap);
+                FillPolygon(triangle.GetEdges(), e.Graphics, Resources.Spiderman, Resources.NormalMap);
             }
 
             DrawTrianglesNest(e.Graphics);
@@ -220,6 +222,30 @@ namespace Filling
 
             if (B > 255) B = 255;
             else if (B < 0) B = 0;
+        }
+
+        private void ColorLabel_Click(object sender, EventArgs e)
+        {
+            ColorDialog.ShowDialog();
+            constColor = ColorDialog.Color;
+            ColorLabel.BackColor = constColor;
+        }
+
+        private void NVectorLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CoefficientsLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LightColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog.ShowDialog();
+            lightColor = ColorDialog.Color;
+            LightColor.BackColor = lightColor;
         }
     }
 }
