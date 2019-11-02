@@ -16,7 +16,10 @@ namespace Filling
         List<Triangle> triangles = null;
         bool isVertexMoving = false;
         Color constColor = Color.White;
+        bool isColorFromTexture = true;
         Color lightColor = Color.FromArgb(255, 255, 255);
+        bool isNormalVectorFromMap = true;
+
 
         public MainForm()
         {
@@ -31,10 +34,11 @@ namespace Filling
 
             foreach (Triangle triangle in triangles)
             {
-                FillPolygon(triangle.GetEdges(), e.Graphics, Resources.Spiderman, Resources.NormalMap);
+                FillPolygon(triangle.GetEdges(), triangle.kd, triangle.ks, triangle.m, e.Graphics, Resources.Spiderman, Resources.NormalMap);
             }
 
             DrawTrianglesNest(e.Graphics);
+            WaitLabel.Visible = false;
         }
 
         private List<Triangle> GenerateTriangles(int N, int M)
@@ -118,7 +122,7 @@ namespace Filling
             isVertexMoving = false;
         }
 
-        private void FillPolygon(List<Edge> edges, Graphics graph, Bitmap OriginalBitmap, Bitmap NormalMap)
+        private void FillPolygon(List<Edge> edges,double kd, double ks, double m, Graphics graph, Bitmap OriginalBitmap, Bitmap NormalMap)
         {
             List<Edge>[] ET = EdgeBucketSort(edges);
             int edgesCounter = edges.Count;
@@ -136,10 +140,10 @@ namespace Filling
                 {
                     foreach(Edge edge in ET[y])
                     {
-                        double m = ((double)edge.p2.X - (double)edge.p1.X) / ((double)edge.p2.Y - (double)edge.p1.Y);
+                        double mx = ((double)edge.p2.X - (double)edge.p1.X) / ((double)edge.p2.Y - (double)edge.p1.Y);
 
                         if (edge.p1.Y != edge.p2.Y)
-                            AET.Add((edge.p2.Y, edge.p1.X, m));
+                            AET.Add((edge.p2.Y, edge.p1.X, mx));
 
                         edgesCounter--;
                     }
@@ -151,12 +155,17 @@ namespace Filling
                 {
                     for(int j=(int)(AET[i].xMin); j<(int)(AET[i+1].xMin); j++)
                     {
-                        Color objectColor = OriginalBitmap.GetPixel(j, y);
-                        Vector3D normalVector = FromNormalMapToVector(NormalMap.GetPixel(j,y));
-                        Vector3D normalVector2 = new Vector3D(0, 0, 1);
-                        int R = (int)GetLambertColor(0.5, 0.5, 1, objectColor.R, new Vector3D(0, 0, 1), normalVector, 5);
-                        int G = (int)GetLambertColor(0.5, 0.5, 1, objectColor.G, new Vector3D(0, 0, 1), normalVector, 5);
-                        int B = (int)GetLambertColor(0.5, 0.5, 1, objectColor.B, new Vector3D(0, 0, 1), normalVector, 5);
+                        Color objectColor = constColor;
+                        if (isColorFromTexture)
+                            objectColor = OriginalBitmap.GetPixel(j, y);
+
+                        Vector3D normalVector = new Vector3D(0, 0, 1);
+                        if(isNormalVectorFromMap)
+                            normalVector = FromNormalMapToVector(NormalMap.GetPixel(j,y));
+
+                        int R = (int)GetLambertColor(((double)lightColor.R/(double)255), objectColor.R, new Vector3D(0, 0, 1), normalVector,ks,kd,m);
+                        int G = (int)GetLambertColor(((double)lightColor.G / (double)255), objectColor.G, new Vector3D(0, 0, 1), normalVector,ks,kd,m);
+                        int B = (int)GetLambertColor(((double)lightColor.B / (double)255), objectColor.B, new Vector3D(0, 0, 1), normalVector,ks,kd,m);
 
                         FixRGB(ref R, ref G, ref B);
 
@@ -196,7 +205,7 @@ namespace Filling
 
         Vector3D DefaultLightColor = new Vector3D(1, 1, 1);
 
-        private double GetLambertColor(double kd, double ks, double lightColor, double objectColor, Vector3D L, Vector3D N, double m)
+        private double GetLambertColor(double lightColor, double objectColor, Vector3D L, Vector3D N, double ks, double kd, double m)
         {
             Vector3D V = new Vector3D(0, 0, 1);
             Vector3D R = 2 * N - L;
@@ -244,8 +253,34 @@ namespace Filling
         private void LightColor_Click(object sender, EventArgs e)
         {
             ColorDialog.ShowDialog();
-            lightColor = ColorDialog.Color;
-            LightColor.BackColor = lightColor;
+            LightColor.BackColor = ColorDialog.Color;
+        }
+
+        private void ChangeCoefficients()
+        {
+            if(CoefficientSameValueRadioButton.Checked)
+            {
+                double kd = kTrackBar.Value * 0.01;
+                double ks = 1 - kd;
+                double m = mTrackBar.Value;
+
+                triangles.WriteAllCoefficienst(kd, ks, m);
+            }
+            else
+            {
+                triangles.WriteRandomCoefficients();
+            }
+
+            isColorFromTexture = TextureColorRadioButton.Checked;
+            isNormalVectorFromMap = NFromTextureRadioButton.Checked;
+            lightColor = LightColor.BackColor;
+        }
+
+        private void SubmitButton_Click(object sender, EventArgs e)
+        {
+            WaitLabel.Visible = true;
+            ChangeCoefficients();
+            Photo.Invalidate();
         }
     }
 }

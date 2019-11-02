@@ -12,12 +12,18 @@ namespace Filling
         public Point p1 { get; set; }
         public Point p2 { get; set; }
         public Point p3 { get; set; }
+        public double ks { get; set; }
+        public double kd { get; set; }
+        public double m { get; set; }
 
         public Triangle(Point p1, Point p2, Point p3)
         {
             this.p1 = p1;
             this.p2 = p2;
             this.p3 = p3;
+            ks = 0.5;
+            kd = 0.5;
+            m = 1;
         }
 
         public List<Edge> GetEdges()
@@ -31,4 +37,30 @@ namespace Filling
             return result;
         }
     }
+
+    public static class Extension
+    {
+        public static void WriteAllCoefficienst(this List<Triangle> list, double kd, double ks, double m)
+        {
+            for(int i=0; i<list.Count; i++)
+            {
+                list[i].kd = kd;
+                list[i].ks = ks;
+                list[i].m = m;
+            }
+        }
+
+        public static void WriteRandomCoefficients(this List<Triangle> list)
+        {
+            Random rnd = new Random(1234);
+
+            for(int i=0; i<list.Count; i++)
+            {
+                list[i].kd = rnd.NextDouble();
+                list[i].ks = 1 - list[i].kd;
+                list[i].m = rnd.Next(1, 100);
+            }
+        }
+    }
+
 }
