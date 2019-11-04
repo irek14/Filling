@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.MainTable = new System.Windows.Forms.TableLayoutPanel();
             this.Photo = new System.Windows.Forms.PictureBox();
             this.MenuPanel = new System.Windows.Forms.Panel();
+            this.WaitLabel = new System.Windows.Forms.Label();
             this.LightColor = new System.Windows.Forms.Label();
             this.LightColorLabel = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
@@ -57,12 +59,14 @@
             this.NFromTextureRadioButton = new System.Windows.Forms.RadioButton();
             this.NVectorLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.ColorLabel = new System.Windows.Forms.Label();
             this.ObjectColorLabel = new System.Windows.Forms.Label();
             this.ConstColorRadioButton = new System.Windows.Forms.RadioButton();
             this.TextureColorRadioButton = new System.Windows.Forms.RadioButton();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
-            this.WaitLabel = new System.Windows.Forms.Label();
+            this.ImageBrowserDialog = new System.Windows.Forms.OpenFileDialog();
+            this.LightTimer = new System.Windows.Forms.Timer(this.components);
             this.MainTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Photo)).BeginInit();
             this.MenuPanel.SuspendLayout();
@@ -122,6 +126,17 @@
             this.MenuPanel.Name = "MenuPanel";
             this.MenuPanel.Size = new System.Drawing.Size(219, 895);
             this.MenuPanel.TabIndex = 1;
+            // 
+            // WaitLabel
+            // 
+            this.WaitLabel.AutoSize = true;
+            this.WaitLabel.ForeColor = System.Drawing.Color.Red;
+            this.WaitLabel.Location = new System.Drawing.Point(78, 698);
+            this.WaitLabel.Name = "WaitLabel";
+            this.WaitLabel.Size = new System.Drawing.Size(141, 13);
+            this.WaitLabel.TabIndex = 17;
+            this.WaitLabel.Text = "Pcozekaj, obraz ładuje się...";
+            this.WaitLabel.Visible = false;
             // 
             // LightColor
             // 
@@ -396,6 +411,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.ColorLabel);
             this.panel1.Controls.Add(this.ObjectColorLabel);
             this.panel1.Controls.Add(this.ConstColorRadioButton);
@@ -405,13 +421,23 @@
             this.panel1.Size = new System.Drawing.Size(200, 100);
             this.panel1.TabIndex = 4;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(105, 15);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "Załaduj";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ColorLabel
             // 
             this.ColorLabel.AutoSize = true;
             this.ColorLabel.BackColor = System.Drawing.Color.White;
             this.ColorLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ColorLabel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ColorLabel.Location = new System.Drawing.Point(77, 41);
+            this.ColorLabel.Location = new System.Drawing.Point(128, 41);
             this.ColorLabel.MinimumSize = new System.Drawing.Size(30, 0);
             this.ColorLabel.Name = "ColorLabel";
             this.ColorLabel.Size = new System.Drawing.Size(30, 15);
@@ -454,16 +480,10 @@
             // 
             this.ColorDialog.Color = System.Drawing.Color.White;
             // 
-            // WaitLabel
+            // LightTimer
             // 
-            this.WaitLabel.AutoSize = true;
-            this.WaitLabel.ForeColor = System.Drawing.Color.Red;
-            this.WaitLabel.Location = new System.Drawing.Point(78, 698);
-            this.WaitLabel.Name = "WaitLabel";
-            this.WaitLabel.Size = new System.Drawing.Size(141, 13);
-            this.WaitLabel.TabIndex = 17;
-            this.WaitLabel.Text = "Pcozekaj, obraz ładuje się...";
-            this.WaitLabel.Visible = false;
+            this.LightTimer.Interval = 1000;
+            this.LightTimer.Tick += new System.EventHandler(this.LightTimer_Tick);
             // 
             // MainForm
             // 
@@ -532,6 +552,9 @@
         private System.Windows.Forms.RadioButton LMovingRadioButton;
         private System.Windows.Forms.RadioButton LConstRadioButton;
         private System.Windows.Forms.Label WaitLabel;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.OpenFileDialog ImageBrowserDialog;
+        private System.Windows.Forms.Timer LightTimer;
     }
 }
 

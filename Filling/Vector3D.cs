@@ -24,7 +24,7 @@ namespace Filling
             return new Vector3D(v.x - w.x, v.y - w.y, v.z - w.z);
         }
 
-        public static Vector3D operator*(int a, Vector3D v)
+        public static Vector3D operator*(double a, Vector3D v)
         {
             return new Vector3D(a * v.x, a * v.y, a * v.z);
         }
@@ -32,6 +32,14 @@ namespace Filling
         public static double operator *(Vector3D v, Vector3D w)
         {
             return v.x * w.x + v.y * w.y + v.z * w.z;
+        }
+
+        public void Normalize()
+        {
+            double length = Math.Sqrt(x * x + y * y + z * z);
+            x = x / length;
+            y = y / length;
+            z = z / length;
         }
     }
 }

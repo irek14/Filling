@@ -19,26 +19,75 @@ namespace Filling
         bool isColorFromTexture = true;
         Color lightColor = Color.FromArgb(255, 255, 255);
         bool isNormalVectorFromMap = true;
-
+        Color[,] photo;
+        Color[,] normalMap;
+        Color[,] newPhoto;
+        Bitmap PhotoBitmap = new Bitmap(Resources.Spiderman);
+        Bitmap NormalMapBitmap = new Bitmap(Resources.NormalMap);
+        Vector3D LVersor = new Vector3D(Resources.Spiderman.Width/2, Resources.Spiderman.Height/2, 100);
+        double t = 1;
 
         public MainForm()
         {
             InitializeComponent();
             triangles = GenerateTriangles(6, 8);
+
+            InitializeMapAndPhoto();
             Photo.Invalidate();
+        }
+
+        private void InitializeMapAndPhoto()
+        {
+            photo = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
+            normalMap = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
+            newPhoto = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
+
+            for (int i=1; i<PhotoBitmap.Width; i++)
+            {
+                for(int j=1; j<PhotoBitmap.Height; j++)
+                {
+                    photo[i,j] = PhotoBitmap.GetPixel(i,j);
+                }
+            }
+
+            for (int i = 0; i < PhotoBitmap.Width; i++)
+            {
+                for (int j = 0; j < PhotoBitmap.Height; j++)
+                {
+                    normalMap[i,j] = NormalMapBitmap.GetPixel(i%NormalMapBitmap.Height,j%NormalMapBitmap.Width);
+                }
+            }
         }
 
         private void Photo_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawImage(Resources.Spiderman, new Point(0,0));
 
-            foreach (Triangle triangle in triangles)
-            {
-                FillPolygon(triangle.GetEdges(), triangle.kd, triangle.ks, triangle.m, e.Graphics, Resources.Spiderman, Resources.NormalMap);
-            }
+            Parallel.ForEach(triangles, (triangle) =>
+           {
+               FillPolygon(triangle.GetEdges(), triangle.kd, triangle.ks, triangle.m, e.Graphics);
+           });
 
+            //Parallel.ForEach(triangles, (triangle) =>
+            //   {
+            //       FillPolygon(triangle.GetEdges(), triangle.kd, triangle.ks, triangle.m, e.Graphics, Resources.Spiderman, Resources.NormalMap);
+            //   });
+
+            DrawPhoto(newPhoto, e.Graphics);
             DrawTrianglesNest(e.Graphics);
             WaitLabel.Visible = false;
+        }
+
+        private void DrawPhoto(Color[,] colours, Graphics g)
+        {
+            photo = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
+            for (int i=0; i< PhotoBitmap.Width; i++)
+            {
+                for(int j=0; j< PhotoBitmap.Height; j++)
+                {
+                    g.FillRectangle(new SolidBrush(colours[i, j]), i, j, 1, 1);
+                }
+            }
         }
 
         private List<Triangle> GenerateTriangles(int N, int M)
@@ -122,7 +171,7 @@ namespace Filling
             isVertexMoving = false;
         }
 
-        private void FillPolygon(List<Edge> edges,double kd, double ks, double m, Graphics graph, Bitmap OriginalBitmap, Bitmap NormalMap)
+        private void FillPolygon(List<Edge> edges,double kd, double ks, double m, Graphics graph)
         {
             List<Edge>[] ET = EdgeBucketSort(edges);
             int edgesCounter = edges.Count;
@@ -157,21 +206,24 @@ namespace Filling
                     {
                         Color objectColor = constColor;
                         if (isColorFromTexture)
-                            objectColor = OriginalBitmap.GetPixel(j, y);
+                            objectColor = photo[j, y];
 
                         Vector3D normalVector = new Vector3D(0, 0, 1);
                         if(isNormalVectorFromMap)
-                            normalVector = FromNormalMapToVector(NormalMap.GetPixel(j,y));
+                            normalVector = FromNormalMapToVector(normalMap[j,y]);
 
-                        int R = (int)GetLambertColor(((double)lightColor.R/(double)255), objectColor.R, new Vector3D(0, 0, 1), normalVector,ks,kd,m);
-                        int G = (int)GetLambertColor(((double)lightColor.G / (double)255), objectColor.G, new Vector3D(0, 0, 1), normalVector,ks,kd,m);
-                        int B = (int)GetLambertColor(((double)lightColor.B / (double)255), objectColor.B, new Vector3D(0, 0, 1), normalVector,ks,kd,m);
+                        Vector3D newL = CalculateLVector(new Vector3D(j, y, 0));
+
+                        int R = (int)GetLambertColor(((double)lightColor.R/(double)255), objectColor.R, newL, normalVector,ks,kd,m);
+                        int G = (int)GetLambertColor(((double)lightColor.G / (double)255), objectColor.G, newL, normalVector,ks,kd,m);
+                        int B = (int)GetLambertColor(((double)lightColor.B / (double)255), objectColor.B, newL, normalVector,ks,kd,m);
 
                         FixRGB(ref R, ref G, ref B);
 
                         Color newColor = Color.FromArgb(R, G, B);
 
-                        graph.FillRectangle(new SolidBrush(newColor), j, y, 1, 1);
+                        //graph.FillRectangle(new SolidBrush(newColor), j, y, 1, 1);
+                        newPhoto[j,y] = newColor;
                     }
                 }
 
@@ -208,16 +260,24 @@ namespace Filling
         private double GetLambertColor(double lightColor, double objectColor, Vector3D L, Vector3D N, double ks, double kd, double m)
         {
             Vector3D V = new Vector3D(0, 0, 1);
-            Vector3D R = 2 * N - L;
+
+            Vector3D R = 2*(N*L)*N - L;
 
             double result = kd * lightColor * objectColor * (N * L) + ks * lightColor * objectColor * Math.Pow(V * R, m);
 
             return result;
         }
 
+        private Vector3D CalculateLVector(Vector3D current_point)
+        {
+            Vector3D newL = new Vector3D(LVersor.x - current_point.x, LVersor.y - current_point.y, LVersor.z);
+            newL.Normalize();
+            return newL;
+        }
+
         private Vector3D FromNormalMapToVector(Color color)
         {
-            var result = new Vector3D(((double)color.R-127.0)/127.0, ((double)color.G - 127.0)/127.0,((double)color.B - 127.0)/127.0);
+            var result = new Vector3D(((double)color.R-127.0)/127.0, ((double)color.G - 127.0)/127.0,((double)color.B)/255.0);
             return result;
         }
 
@@ -271,6 +331,15 @@ namespace Filling
                 triangles.WriteRandomCoefficients();
             }
 
+            if(LConstRadioButton.Checked)
+            {
+                LightTimer.Stop();
+            }
+            else
+            {
+                LightTimer.Start();
+            }
+
             isColorFromTexture = TextureColorRadioButton.Checked;
             isNormalVectorFromMap = NFromTextureRadioButton.Checked;
             lightColor = LightColor.BackColor;
@@ -280,6 +349,30 @@ namespace Filling
         {
             WaitLabel.Visible = true;
             ChangeCoefficients();
+            Photo.Invalidate();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog choofdlog = new OpenFileDialog();
+            choofdlog.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+            choofdlog.FilterIndex = 1;
+            choofdlog.Multiselect = true;
+            string sSelectedFile;
+
+            if (choofdlog.ShowDialog() == DialogResult.OK)
+            {
+                PhotoBitmap = new Bitmap(choofdlog.FileName);
+                InitializeMapAndPhoto();
+            }
+        }
+
+        private void LightTimer_Tick(object sender, EventArgs e)
+        {
+            double newX = PhotoBitmap.Width/2 * Math.Sin(t + 5 * Math.PI / 2) + PhotoBitmap.Width/2;
+            double newY = PhotoBitmap.Height/2 * Math.Sin(4 * t) + PhotoBitmap.Height/2;
+            t += 0.2;
+            LVersor = new Vector3D(newX, newY, 100);
             Photo.Invalidate();
         }
     }

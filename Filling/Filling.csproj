@@ -90,13 +90,13 @@
     <None Include="Resources\spiderman.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\normalMap.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\NormalMap2.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Volleyball.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NormalMap.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
