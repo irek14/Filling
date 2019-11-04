@@ -24,6 +24,7 @@ namespace Filling
         Color[,] newPhoto;
         Bitmap PhotoBitmap = new Bitmap(Resources.Spiderman);
         Bitmap NormalMapBitmap = new Bitmap(Resources.NormalMap);
+        Bitmap testBitmap = new Bitmap(Resources.Spiderman);
         Vector3D LVersor = new Vector3D(Resources.Spiderman.Width/2, Resources.Spiderman.Height/2, 100);
         double t = 1;
 
@@ -80,14 +81,15 @@ namespace Filling
 
         private void DrawPhoto(Color[,] colours, Graphics g)
         {
-            photo = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
-            for (int i=0; i< PhotoBitmap.Width; i++)
+            //photo = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
+            for (int i = 0; i < PhotoBitmap.Width; i++)
             {
-                for(int j=0; j< PhotoBitmap.Height; j++)
+                for (int j = 0; j < PhotoBitmap.Height; j++)
                 {
-                    g.FillRectangle(new SolidBrush(colours[i, j]), i, j, 1, 1);
+                    testBitmap.SetPixel( i, j, colours[i,j]);
                 }
             }
+            g.DrawImage(testBitmap,0,0);
         }
 
         private List<Triangle> GenerateTriangles(int N, int M)
@@ -223,6 +225,7 @@ namespace Filling
                         Color newColor = Color.FromArgb(R, G, B);
 
                         //graph.FillRectangle(new SolidBrush(newColor), j, y, 1, 1);
+                        //testBitmap.SetPixel(j, y, newColor);
                         newPhoto[j,y] = newColor;
                     }
                 }
@@ -371,7 +374,7 @@ namespace Filling
         {
             double newX = PhotoBitmap.Width/2 * Math.Sin(t + 5 * Math.PI / 2) + PhotoBitmap.Width/2;
             double newY = PhotoBitmap.Height/2 * Math.Sin(4 * t) + PhotoBitmap.Height/2;
-            t += 0.2;
+            t += 0.1;
             LVersor = new Vector3D(newX, newY, 100);
             Photo.Invalidate();
         }
