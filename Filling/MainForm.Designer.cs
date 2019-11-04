@@ -482,7 +482,7 @@
             // 
             // LightTimer
             // 
-            this.LightTimer.Interval = 500;
+            this.LightTimer.Interval = 200;
             this.LightTimer.Tick += new System.EventHandler(this.LightTimer_Tick);
             // 
             // MainForm

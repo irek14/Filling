@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,34 +64,43 @@ namespace Filling
 
         private void Photo_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(Resources.Spiderman, new Point(0,0));
+            //e.Graphics.DrawImage(PhotoBitmap, new Point(0,0));
+
+            Graphics g = e.Graphics;
 
             Parallel.ForEach(triangles, (triangle) =>
-           {
-               FillPolygon(triangle.GetEdges(), triangle.kd, triangle.ks, triangle.m, e.Graphics);
-           });
-
-            //Parallel.ForEach(triangles, (triangle) =>
-            //   {
-            //       FillPolygon(triangle.GetEdges(), triangle.kd, triangle.ks, triangle.m, e.Graphics, Resources.Spiderman, Resources.NormalMap);
-            //   });
-
-            DrawPhoto(newPhoto, e.Graphics);
-            DrawTrianglesNest(e.Graphics);
-            WaitLabel.Visible = false;
-        }
-
-        private void DrawPhoto(Color[,] colours, Graphics g)
-        {
-            //photo = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
-            for (int i = 0; i < PhotoBitmap.Width; i++)
             {
-                for (int j = 0; j < PhotoBitmap.Height; j++)
+                FillPolygon(triangle.GetEdges(), triangle.kd, triangle.ks, triangle.m);
+            });
+
+            using (Bitmap processedBitmap = new Bitmap(PhotoBitmap.Width, PhotoBitmap.Height))
+            {
+                unsafe
                 {
-                    testBitmap.SetPixel( i, j, colours[i,j]);
+                    BitmapData bitmapData = processedBitmap.LockBits(new Rectangle(0, 0, processedBitmap.Width, processedBitmap.Height), ImageLockMode.ReadWrite, processedBitmap.PixelFormat);
+
+                    int bytesPerPixel = System.Drawing.Bitmap.GetPixelFormatSize(processedBitmap.PixelFormat) / 8;
+                    int heightInPixels = bitmapData.Height;
+                    int widthInBytes = bitmapData.Width * bytesPerPixel;
+                    byte* PtrFirstPixel = (byte*)bitmapData.Scan0;
+
+                    Parallel.For(0, heightInPixels, y =>
+                    {
+                        byte* currentLine = PtrFirstPixel + (y * bitmapData.Stride);
+                        for (int x = 0; x < widthInBytes; x = x + bytesPerPixel)
+                        {
+                            currentLine[x] = newPhoto[x / 4, y].B;
+                            currentLine[x + 1] = newPhoto[x / 4, y].G;
+                            currentLine[x + 2] = newPhoto[x / 4, y].R;
+                            currentLine[x + 3] = newPhoto[x / 4, y].A;
+                        }
+                    });
+                    processedBitmap.UnlockBits(bitmapData);
                 }
+
+                g.DrawImage(processedBitmap, 0, 0);
             }
-            g.DrawImage(testBitmap,0,0);
+            WaitLabel.Visible = false;
         }
 
         private List<Triangle> GenerateTriangles(int N, int M)
@@ -173,7 +184,7 @@ namespace Filling
             isVertexMoving = false;
         }
 
-        private void FillPolygon(List<Edge> edges,double kd, double ks, double m, Graphics graph)
+        private void FillPolygon(List<Edge> edges,double kd, double ks, double m)
         {
             List<Edge>[] ET = EdgeBucketSort(edges);
             int edgesCounter = edges.Count;
@@ -280,7 +291,7 @@ namespace Filling
 
         private Vector3D FromNormalMapToVector(Color color)
         {
-            var result = new Vector3D(((double)color.R-127.0)/127.0, ((double)color.G - 127.0)/127.0,((double)color.B)/255.0);
+            var result = new Vector3D(-((double)color.R-127.0)/127.0, -((double)color.G - 127.0)/127.0,((double)color.B)/255.0);
             return result;
         }
 
@@ -374,7 +385,7 @@ namespace Filling
         {
             double newX = PhotoBitmap.Width/2 * Math.Sin(t + 5 * Math.PI / 2) + PhotoBitmap.Width/2;
             double newY = PhotoBitmap.Height/2 * Math.Sin(4 * t) + PhotoBitmap.Height/2;
-            t += 0.1;
+            t += 0.03;
             LVersor = new Vector3D(newX, newY, 100);
             Photo.Invalidate();
         }
