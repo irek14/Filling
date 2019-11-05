@@ -150,7 +150,7 @@
             // 
             // NText
             // 
-            this.NText.Location = new System.Drawing.Point(163, 721);
+            this.NText.Location = new System.Drawing.Point(166, 721);
             this.NText.Name = "NText";
             this.NText.Size = new System.Drawing.Size(26, 20);
             this.NText.TabIndex = 20;
