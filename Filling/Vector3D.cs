@@ -34,6 +34,11 @@ namespace Filling
             return v.x * w.x + v.y * w.y + v.z * w.z;
         }
 
+        public static Vector3D operator +(Vector3D v, Vector3D w)
+        {
+            return new Vector3D(v.x + w.x, v.y + w.y, v.z + w.z);
+        }
+
         public void Normalize()
         {
             double length = Math.Sqrt(x * x + y * y + z * z);
