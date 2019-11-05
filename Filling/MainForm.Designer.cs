@@ -142,7 +142,7 @@
             // XLabel
             // 
             this.XLabel.AutoSize = true;
-            this.XLabel.Location = new System.Drawing.Point(163, 728);
+            this.XLabel.Location = new System.Drawing.Point(155, 727);
             this.XLabel.Name = "XLabel";
             this.XLabel.Size = new System.Drawing.Size(12, 13);
             this.XLabel.TabIndex = 21;
@@ -150,7 +150,7 @@
             // 
             // NText
             // 
-            this.NText.Location = new System.Drawing.Point(180, 721);
+            this.NText.Location = new System.Drawing.Point(163, 721);
             this.NText.Name = "NText";
             this.NText.Size = new System.Drawing.Size(26, 20);
             this.NText.TabIndex = 20;
@@ -191,7 +191,7 @@
             this.LightColor.BackColor = System.Drawing.Color.White;
             this.LightColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.LightColor.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.LightColor.Location = new System.Drawing.Point(137, 693);
+            this.LightColor.Location = new System.Drawing.Point(131, 694);
             this.LightColor.MinimumSize = new System.Drawing.Size(30, 0);
             this.LightColor.Name = "LightColor";
             this.LightColor.Size = new System.Drawing.Size(30, 15);
@@ -202,7 +202,7 @@
             // 
             this.LightColorLabel.AutoSize = true;
             this.LightColorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.LightColorLabel.Location = new System.Drawing.Point(9, 693);
+            this.LightColorLabel.Location = new System.Drawing.Point(6, 693);
             this.LightColorLabel.Name = "LightColorLabel";
             this.LightColorLabel.Size = new System.Drawing.Size(99, 16);
             this.LightColorLabel.TabIndex = 15;

@@ -31,7 +31,7 @@ namespace Filling
         Bitmap PhotoBitmap = new Bitmap(Resources.Spiderman);
         Bitmap NormalMapBitmap = new Bitmap(Resources.NormalMap);
         Bitmap testBitmap = new Bitmap(Resources.Spiderman);
-        Vector3D LVersor = new Vector3D(Resources.Spiderman.Width/2, Resources.Spiderman.Height/2, 100);
+        Vector3D LVersor = new Vector3D(Resources.Spiderman.Width/2, Resources.Spiderman.Height/2, 1000);
         double t = 1;
         int lightZ = 100;
         int deltaZ = 10;
