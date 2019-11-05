@@ -33,6 +33,8 @@ namespace Filling
         Bitmap testBitmap = new Bitmap(Resources.Spiderman);
         Vector3D LVersor = new Vector3D(Resources.Spiderman.Width/2, Resources.Spiderman.Height/2, 100);
         double t = 1;
+        int lightZ = 100;
+        int deltaZ = 10;
         PaintMode current_mode = PaintMode.Normal;
 
         public MainForm()
@@ -125,7 +127,7 @@ namespace Filling
             }
             WaitLabel.Visible = false;
 
-            if(triangles.Count < 100)
+            if(triangles.Count < 1000)
                 DrawTrianglesNest(e.Graphics);
         }
 
@@ -293,7 +295,10 @@ namespace Filling
             double newX = PhotoBitmap.Width/2 * Math.Sin(t + 5 * Math.PI / 2) + PhotoBitmap.Width/2;
             double newY = PhotoBitmap.Height/2 * Math.Sin(4 * t) + PhotoBitmap.Height/2;
             t += 0.03;
-            LVersor = new Vector3D(newX, newY, 100);
+            lightZ += deltaZ;
+            if (lightZ == 250) deltaZ *= -1;
+            if (lightZ == 40) deltaZ *= -1;
+            LVersor = new Vector3D(newX, newY, lightZ);
             Photo.Invalidate();
         }
 
