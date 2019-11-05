@@ -289,7 +289,7 @@
             // CoefficientRandomRadioButton
             // 
             this.CoefficientRandomRadioButton.AutoSize = true;
-            this.CoefficientRandomRadioButton.Location = new System.Drawing.Point(0, 189);
+            this.CoefficientRandomRadioButton.Location = new System.Drawing.Point(10, 182);
             this.CoefficientRandomRadioButton.Name = "CoefficientRandomRadioButton";
             this.CoefficientRandomRadioButton.Size = new System.Drawing.Size(62, 17);
             this.CoefficientRandomRadioButton.TabIndex = 13;
