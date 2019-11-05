@@ -68,7 +68,7 @@ namespace Filling
             for(int i=0; i<list.Count; i++)
             {
                 list[i].kd = rnd.NextDouble();
-                list[i].ks = 1 - list[i].kd;
+                list[i].ks = rnd.NextDouble();
                 list[i].m = rnd.Next(1, 100);
             }
         }

@@ -245,8 +245,8 @@ namespace Filling
 
             if(CoefficientSameValueRadioButton.Checked)
             {
-                double kd = kTrackBar.Value * 0.01;
-                double ks = 1 - kd;
+                double kd = kdTrackBar.Value * 0.01;
+                double ks = ksTrackBar.Value * 0.01;
                 double m = mTrackBar.Value;
 
                 triangles.WriteAllCoefficienst(kd, ks, m);

@@ -53,7 +53,7 @@
             this.ksLabel = new System.Windows.Forms.Label();
             this.kdLabel = new System.Windows.Forms.Label();
             this.CoefficientsLabel = new System.Windows.Forms.Label();
-            this.kTrackBar = new System.Windows.Forms.TrackBar();
+            this.kdTrackBar = new System.Windows.Forms.TrackBar();
             this.panel3 = new System.Windows.Forms.Panel();
             this.HybridFillRadioButton = new System.Windows.Forms.RadioButton();
             this.InterpolationFillRadioButton = new System.Windows.Forms.RadioButton();
@@ -72,16 +72,18 @@
             this.ImageBrowserDialog = new System.Windows.Forms.OpenFileDialog();
             this.LightTimer = new System.Windows.Forms.Timer(this.components);
             this.LoadNormalMapButton = new System.Windows.Forms.Button();
+            this.ksTrackBar = new System.Windows.Forms.TrackBar();
             this.MainTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Photo)).BeginInit();
             this.MenuPanel.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mTrackBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.kTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kdTrackBar)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ksTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTable
@@ -139,7 +141,7 @@
             // XLabel
             // 
             this.XLabel.AutoSize = true;
-            this.XLabel.Location = new System.Drawing.Point(159, 684);
+            this.XLabel.Location = new System.Drawing.Point(163, 728);
             this.XLabel.Name = "XLabel";
             this.XLabel.Size = new System.Drawing.Size(12, 13);
             this.XLabel.TabIndex = 21;
@@ -147,7 +149,7 @@
             // 
             // NText
             // 
-            this.NText.Location = new System.Drawing.Point(172, 679);
+            this.NText.Location = new System.Drawing.Point(180, 721);
             this.NText.Name = "NText";
             this.NText.Size = new System.Drawing.Size(26, 20);
             this.NText.TabIndex = 20;
@@ -155,7 +157,7 @@
             // 
             // MText
             // 
-            this.MText.Location = new System.Drawing.Point(131, 679);
+            this.MText.Location = new System.Drawing.Point(131, 721);
             this.MText.Name = "MText";
             this.MText.Size = new System.Drawing.Size(26, 20);
             this.MText.TabIndex = 19;
@@ -165,7 +167,7 @@
             // 
             this.NestSizeLabel.AutoSize = true;
             this.NestSizeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.NestSizeLabel.Location = new System.Drawing.Point(7, 683);
+            this.NestSizeLabel.Location = new System.Drawing.Point(6, 725);
             this.NestSizeLabel.Name = "NestSizeLabel";
             this.NestSizeLabel.Size = new System.Drawing.Size(106, 16);
             this.NestSizeLabel.TabIndex = 18;
@@ -175,7 +177,7 @@
             // 
             this.WaitLabel.AutoSize = true;
             this.WaitLabel.ForeColor = System.Drawing.Color.Red;
-            this.WaitLabel.Location = new System.Drawing.Point(78, 766);
+            this.WaitLabel.Location = new System.Drawing.Point(75, 790);
             this.WaitLabel.Name = "WaitLabel";
             this.WaitLabel.Size = new System.Drawing.Size(141, 13);
             this.WaitLabel.TabIndex = 17;
@@ -188,7 +190,7 @@
             this.LightColor.BackColor = System.Drawing.Color.White;
             this.LightColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.LightColor.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.LightColor.Location = new System.Drawing.Point(137, 640);
+            this.LightColor.Location = new System.Drawing.Point(137, 693);
             this.LightColor.MinimumSize = new System.Drawing.Size(30, 0);
             this.LightColor.Name = "LightColor";
             this.LightColor.Size = new System.Drawing.Size(30, 15);
@@ -199,7 +201,7 @@
             // 
             this.LightColorLabel.AutoSize = true;
             this.LightColorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.LightColorLabel.Location = new System.Drawing.Point(5, 640);
+            this.LightColorLabel.Location = new System.Drawing.Point(9, 693);
             this.LightColorLabel.Name = "LightColorLabel";
             this.LightColorLabel.Size = new System.Drawing.Size(99, 16);
             this.LightColorLabel.TabIndex = 15;
@@ -210,7 +212,7 @@
             this.panel5.Controls.Add(this.LightVectorLabel);
             this.panel5.Controls.Add(this.LMovingRadioButton);
             this.panel5.Controls.Add(this.LConstRadioButton);
-            this.panel5.Location = new System.Drawing.Point(10, 524);
+            this.panel5.Location = new System.Drawing.Point(9, 580);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(200, 100);
             this.panel5.TabIndex = 5;
@@ -249,7 +251,7 @@
             // 
             // SubmitButton
             // 
-            this.SubmitButton.Location = new System.Drawing.Point(131, 740);
+            this.SubmitButton.Location = new System.Drawing.Point(131, 764);
             this.SubmitButton.Name = "SubmitButton";
             this.SubmitButton.Size = new System.Drawing.Size(75, 23);
             this.SubmitButton.TabIndex = 14;
@@ -269,6 +271,7 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.ksTrackBar);
             this.panel4.Controls.Add(this.CoefficientRandomRadioButton);
             this.panel4.Controls.Add(this.CoefficientSameValueRadioButton);
             this.panel4.Controls.Add(this.mTrackBar);
@@ -276,16 +279,16 @@
             this.panel4.Controls.Add(this.ksLabel);
             this.panel4.Controls.Add(this.kdLabel);
             this.panel4.Controls.Add(this.CoefficientsLabel);
-            this.panel4.Controls.Add(this.kTrackBar);
+            this.panel4.Controls.Add(this.kdTrackBar);
             this.panel4.Location = new System.Drawing.Point(8, 345);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(201, 158);
+            this.panel4.Size = new System.Drawing.Size(198, 220);
             this.panel4.TabIndex = 6;
             // 
             // CoefficientRandomRadioButton
             // 
             this.CoefficientRandomRadioButton.AutoSize = true;
-            this.CoefficientRandomRadioButton.Location = new System.Drawing.Point(11, 123);
+            this.CoefficientRandomRadioButton.Location = new System.Drawing.Point(0, 189);
             this.CoefficientRandomRadioButton.Name = "CoefficientRandomRadioButton";
             this.CoefficientRandomRadioButton.Size = new System.Drawing.Size(62, 17);
             this.CoefficientRandomRadioButton.TabIndex = 13;
@@ -307,7 +310,7 @@
             // mTrackBar
             // 
             this.mTrackBar.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.mTrackBar.Location = new System.Drawing.Point(29, 83);
+            this.mTrackBar.Location = new System.Drawing.Point(28, 131);
             this.mTrackBar.Maximum = 100;
             this.mTrackBar.Minimum = 1;
             this.mTrackBar.Name = "mTrackBar";
@@ -319,7 +322,7 @@
             // mLabel
             // 
             this.mLabel.AutoSize = true;
-            this.mLabel.Location = new System.Drawing.Point(9, 93);
+            this.mLabel.Location = new System.Drawing.Point(7, 142);
             this.mLabel.Name = "mLabel";
             this.mLabel.Size = new System.Drawing.Size(15, 13);
             this.mLabel.TabIndex = 11;
@@ -328,7 +331,7 @@
             // ksLabel
             // 
             this.ksLabel.AutoSize = true;
-            this.ksLabel.Location = new System.Drawing.Point(180, 53);
+            this.ksLabel.Location = new System.Drawing.Point(9, 96);
             this.ksLabel.Name = "ksLabel";
             this.ksLabel.Size = new System.Drawing.Size(18, 13);
             this.ksLabel.TabIndex = 10;
@@ -354,19 +357,19 @@
             this.CoefficientsLabel.Text = "Współczynniki";
             this.CoefficientsLabel.Click += new System.EventHandler(this.CoefficientsLabel_Click);
             // 
-            // kTrackBar
+            // kdTrackBar
             // 
-            this.kTrackBar.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.kTrackBar.LargeChange = 20;
-            this.kTrackBar.Location = new System.Drawing.Point(28, 42);
-            this.kTrackBar.Maximum = 100;
-            this.kTrackBar.Name = "kTrackBar";
-            this.kTrackBar.Size = new System.Drawing.Size(137, 45);
-            this.kTrackBar.SmallChange = 5;
-            this.kTrackBar.TabIndex = 8;
-            this.kTrackBar.TickFrequency = 5;
-            this.kTrackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.kTrackBar.Value = 50;
+            this.kdTrackBar.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.kdTrackBar.LargeChange = 20;
+            this.kdTrackBar.Location = new System.Drawing.Point(28, 42);
+            this.kdTrackBar.Maximum = 100;
+            this.kdTrackBar.Name = "kdTrackBar";
+            this.kdTrackBar.Size = new System.Drawing.Size(137, 45);
+            this.kdTrackBar.SmallChange = 5;
+            this.kdTrackBar.TabIndex = 8;
+            this.kdTrackBar.TickFrequency = 5;
+            this.kdTrackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.kdTrackBar.Value = 50;
             // 
             // panel3
             // 
@@ -540,6 +543,20 @@
             this.LoadNormalMapButton.UseVisualStyleBackColor = true;
             this.LoadNormalMapButton.Click += new System.EventHandler(this.LoadNormalMapButton_Click);
             // 
+            // ksTrackBar
+            // 
+            this.ksTrackBar.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.ksTrackBar.LargeChange = 20;
+            this.ksTrackBar.Location = new System.Drawing.Point(28, 83);
+            this.ksTrackBar.Maximum = 100;
+            this.ksTrackBar.Name = "ksTrackBar";
+            this.ksTrackBar.Size = new System.Drawing.Size(137, 45);
+            this.ksTrackBar.SmallChange = 5;
+            this.ksTrackBar.TabIndex = 14;
+            this.ksTrackBar.TickFrequency = 5;
+            this.ksTrackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.ksTrackBar.Value = 50;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -559,13 +576,14 @@
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mTrackBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.kTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kdTrackBar)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ksTrackBar)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -587,7 +605,7 @@
         private System.Windows.Forms.Label FillColorLabel;
         private System.Windows.Forms.Label ksLabel;
         private System.Windows.Forms.Label kdLabel;
-        private System.Windows.Forms.TrackBar kTrackBar;
+        private System.Windows.Forms.TrackBar kdTrackBar;
         private System.Windows.Forms.Label CoefficientsLabel;
         private System.Windows.Forms.RadioButton HybridFillRadioButton;
         private System.Windows.Forms.RadioButton InterpolationFillRadioButton;
@@ -615,6 +633,7 @@
         private System.Windows.Forms.TextBox MText;
         private System.Windows.Forms.Label NestSizeLabel;
         private System.Windows.Forms.Button LoadNormalMapButton;
+        private System.Windows.Forms.TrackBar ksTrackBar;
     }
 }
 
