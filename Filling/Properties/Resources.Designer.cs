@@ -61,6 +61,16 @@ namespace Filling.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Iconshock_Spiderman_Spiderman {
+            get {
+                object obj = ResourceManager.GetObject("Iconshock_Spiderman_Spiderman", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap NormalMap {

@@ -108,5 +108,8 @@
   <ItemGroup>
     <None Include="Resources\NormalMap.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Iconshock-Spiderman-Spiderman.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
