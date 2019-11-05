@@ -490,7 +490,7 @@
             // 
             // LightTimer
             // 
-            this.LightTimer.Interval = 200;
+            this.LightTimer.Interval = 333;
             this.LightTimer.Tick += new System.EventHandler(this.LightTimer_Tick);
             // 
             // NestSizeLabel
