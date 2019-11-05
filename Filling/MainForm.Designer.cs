@@ -32,6 +32,10 @@
             this.MainTable = new System.Windows.Forms.TableLayoutPanel();
             this.Photo = new System.Windows.Forms.PictureBox();
             this.MenuPanel = new System.Windows.Forms.Panel();
+            this.XLabel = new System.Windows.Forms.Label();
+            this.NText = new System.Windows.Forms.TextBox();
+            this.MText = new System.Windows.Forms.TextBox();
+            this.NestSizeLabel = new System.Windows.Forms.Label();
             this.WaitLabel = new System.Windows.Forms.Label();
             this.LightColor = new System.Windows.Forms.Label();
             this.LightColorLabel = new System.Windows.Forms.Label();
@@ -59,7 +63,7 @@
             this.NFromTextureRadioButton = new System.Windows.Forms.RadioButton();
             this.NVectorLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.LoadImageButton = new System.Windows.Forms.Button();
             this.ColorLabel = new System.Windows.Forms.Label();
             this.ObjectColorLabel = new System.Windows.Forms.Label();
             this.ConstColorRadioButton = new System.Windows.Forms.RadioButton();
@@ -67,10 +71,7 @@
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
             this.ImageBrowserDialog = new System.Windows.Forms.OpenFileDialog();
             this.LightTimer = new System.Windows.Forms.Timer(this.components);
-            this.NestSizeLabel = new System.Windows.Forms.Label();
-            this.MText = new System.Windows.Forms.TextBox();
-            this.NText = new System.Windows.Forms.TextBox();
-            this.XLabel = new System.Windows.Forms.Label();
+            this.LoadNormalMapButton = new System.Windows.Forms.Button();
             this.MainTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Photo)).BeginInit();
             this.MenuPanel.SuspendLayout();
@@ -134,6 +135,41 @@
             this.MenuPanel.Name = "MenuPanel";
             this.MenuPanel.Size = new System.Drawing.Size(219, 895);
             this.MenuPanel.TabIndex = 1;
+            // 
+            // XLabel
+            // 
+            this.XLabel.AutoSize = true;
+            this.XLabel.Location = new System.Drawing.Point(159, 684);
+            this.XLabel.Name = "XLabel";
+            this.XLabel.Size = new System.Drawing.Size(12, 13);
+            this.XLabel.TabIndex = 21;
+            this.XLabel.Text = "x";
+            // 
+            // NText
+            // 
+            this.NText.Location = new System.Drawing.Point(172, 679);
+            this.NText.Name = "NText";
+            this.NText.Size = new System.Drawing.Size(26, 20);
+            this.NText.TabIndex = 20;
+            this.NText.Text = "8";
+            // 
+            // MText
+            // 
+            this.MText.Location = new System.Drawing.Point(131, 679);
+            this.MText.Name = "MText";
+            this.MText.Size = new System.Drawing.Size(26, 20);
+            this.MText.TabIndex = 19;
+            this.MText.Text = "6";
+            // 
+            // NestSizeLabel
+            // 
+            this.NestSizeLabel.AutoSize = true;
+            this.NestSizeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.NestSizeLabel.Location = new System.Drawing.Point(7, 683);
+            this.NestSizeLabel.Name = "NestSizeLabel";
+            this.NestSizeLabel.Size = new System.Drawing.Size(106, 16);
+            this.NestSizeLabel.TabIndex = 18;
+            this.NestSizeLabel.Text = "Rozmiar siatki";
             // 
             // WaitLabel
             // 
@@ -376,6 +412,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.LoadNormalMapButton);
             this.panel2.Controls.Add(this.NConstRadioButton);
             this.panel2.Controls.Add(this.NFromTextureRadioButton);
             this.panel2.Controls.Add(this.NVectorLabel);
@@ -419,7 +456,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.LoadImageButton);
             this.panel1.Controls.Add(this.ColorLabel);
             this.panel1.Controls.Add(this.ObjectColorLabel);
             this.panel1.Controls.Add(this.ConstColorRadioButton);
@@ -429,15 +466,15 @@
             this.panel1.Size = new System.Drawing.Size(200, 100);
             this.panel1.TabIndex = 4;
             // 
-            // button1
+            // LoadImageButton
             // 
-            this.button1.Location = new System.Drawing.Point(105, 15);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Załaduj";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.LoadImageButton.Location = new System.Drawing.Point(105, 15);
+            this.LoadImageButton.Name = "LoadImageButton";
+            this.LoadImageButton.Size = new System.Drawing.Size(75, 23);
+            this.LoadImageButton.TabIndex = 5;
+            this.LoadImageButton.Text = "Załaduj";
+            this.LoadImageButton.UseVisualStyleBackColor = true;
+            this.LoadImageButton.Click += new System.EventHandler(this.LoadImageButton_Click);
             // 
             // ColorLabel
             // 
@@ -493,40 +530,15 @@
             this.LightTimer.Interval = 333;
             this.LightTimer.Tick += new System.EventHandler(this.LightTimer_Tick);
             // 
-            // NestSizeLabel
+            // LoadNormalMapButton
             // 
-            this.NestSizeLabel.AutoSize = true;
-            this.NestSizeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.NestSizeLabel.Location = new System.Drawing.Point(7, 683);
-            this.NestSizeLabel.Name = "NestSizeLabel";
-            this.NestSizeLabel.Size = new System.Drawing.Size(106, 16);
-            this.NestSizeLabel.TabIndex = 18;
-            this.NestSizeLabel.Text = "Rozmiar siatki";
-            // 
-            // MText
-            // 
-            this.MText.Location = new System.Drawing.Point(131, 679);
-            this.MText.Name = "MText";
-            this.MText.Size = new System.Drawing.Size(26, 20);
-            this.MText.TabIndex = 19;
-            this.MText.Text = "6";
-            // 
-            // NText
-            // 
-            this.NText.Location = new System.Drawing.Point(172, 679);
-            this.NText.Name = "NText";
-            this.NText.Size = new System.Drawing.Size(26, 20);
-            this.NText.TabIndex = 20;
-            this.NText.Text = "8";
-            // 
-            // XLabel
-            // 
-            this.XLabel.AutoSize = true;
-            this.XLabel.Location = new System.Drawing.Point(159, 684);
-            this.XLabel.Name = "XLabel";
-            this.XLabel.Size = new System.Drawing.Size(12, 13);
-            this.XLabel.TabIndex = 21;
-            this.XLabel.Text = "x";
+            this.LoadNormalMapButton.Location = new System.Drawing.Point(105, 19);
+            this.LoadNormalMapButton.Name = "LoadNormalMapButton";
+            this.LoadNormalMapButton.Size = new System.Drawing.Size(75, 23);
+            this.LoadNormalMapButton.TabIndex = 6;
+            this.LoadNormalMapButton.Text = "Załaduj";
+            this.LoadNormalMapButton.UseVisualStyleBackColor = true;
+            this.LoadNormalMapButton.Click += new System.EventHandler(this.LoadNormalMapButton_Click);
             // 
             // MainForm
             // 
@@ -595,13 +607,14 @@
         private System.Windows.Forms.RadioButton LMovingRadioButton;
         private System.Windows.Forms.RadioButton LConstRadioButton;
         private System.Windows.Forms.Label WaitLabel;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button LoadImageButton;
         private System.Windows.Forms.OpenFileDialog ImageBrowserDialog;
         private System.Windows.Forms.Timer LightTimer;
         private System.Windows.Forms.Label XLabel;
         private System.Windows.Forms.TextBox NText;
         private System.Windows.Forms.TextBox MText;
         private System.Windows.Forms.Label NestSizeLabel;
+        private System.Windows.Forms.Button LoadNormalMapButton;
     }
 }
 

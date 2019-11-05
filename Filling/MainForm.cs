@@ -16,6 +16,8 @@ namespace Filling
     public partial class MainForm : Form
     {
         enum PaintMode {Normal, Interpolate, HybridInterpolate};
+        const int PhotoWidth = 1431;
+        const int PhotoHeight = 895;
 
         List<Triangle> triangles = null;
         bool isVertexMoving = false;
@@ -44,30 +46,31 @@ namespace Filling
 
         private void InitializeMapAndPhoto()
         {
-            photo = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
-            normalMap = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
-            newPhoto = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
+            photo = new Color[PhotoWidth, PhotoHeight];
+            normalMap = new Color[PhotoWidth, PhotoHeight];
+            newPhoto = new Color[PhotoWidth, PhotoHeight];
 
-            for (int i=0; i<PhotoBitmap.Width; i++)
+            for (int i = 0; i < PhotoWidth; i++)
             {
-                for(int j=0; j<PhotoBitmap.Height; j++)
+                for (int j = 0; j < PhotoHeight; j++)
                 {
-                    photo[i,j] = PhotoBitmap.GetPixel(i,j);
+                    photo[i, j] = PhotoBitmap.GetPixel(i % PhotoBitmap.Width, j % PhotoBitmap.Height);
                 }
             }
 
-            for (int i = 0; i < PhotoBitmap.Width; i++)
+            for (int i = 0; i < PhotoWidth; i++)
             {
-                for (int j = 0; j < PhotoBitmap.Height; j++)
+                for (int j = 0; j < PhotoHeight; j++)
                 {
-                    normalMap[i,j] = NormalMapBitmap.GetPixel(i%NormalMapBitmap.Height,j%NormalMapBitmap.Width);
+                    normalMap[i,j] = NormalMapBitmap.GetPixel(i%NormalMapBitmap.Width,j%NormalMapBitmap.Height);
                 }
             }
         }
 
         private void Photo_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(PhotoBitmap, new Point(0,0));
+            if(PhotoBitmap.Width >= PhotoWidth && PhotoBitmap.Height >= PhotoHeight)
+                e.Graphics.DrawImage(PhotoBitmap, new Point(0,0));
 
             Graphics g = e.Graphics;
 
@@ -93,9 +96,7 @@ namespace Filling
                 });
             }
 
-
-
-            using (Bitmap processedBitmap = new Bitmap(PhotoBitmap.Width, PhotoBitmap.Height))
+            using (Bitmap processedBitmap = new Bitmap(PhotoWidth, PhotoHeight))
             {
                 unsafe
                 {
@@ -132,11 +133,11 @@ namespace Filling
         {
             List<Triangle> result = new List<Triangle>();
 
-            int width =  (int)(Photo.Width*0.9/N);
-            int height = (int)(Photo.Height * 0.9 /M);
+            int width =  (int)(PhotoWidth*0.9/N);
+            int height = (int)(PhotoHeight * 0.9 /M);
 
-            int start_width = (Photo.Width - width*N) / 2;
-            int start_height = (Photo.Height - height*M) / 2;
+            int start_width = (PhotoWidth - width*N) / 2;
+            int start_height = (PhotoHeight - height*M) / 2;
 
             Point[,] points = new Point[M + 1, N + 1];
 
@@ -287,21 +288,6 @@ namespace Filling
             Photo.Invalidate();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog choofdlog = new OpenFileDialog();
-            choofdlog.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
-            choofdlog.FilterIndex = 1;
-            choofdlog.Multiselect = true;
-            string sSelectedFile;
-
-            if (choofdlog.ShowDialog() == DialogResult.OK)
-            {
-                PhotoBitmap = new Bitmap(choofdlog.FileName);
-                InitializeMapAndPhoto();
-            }
-        }
-
         private void LightTimer_Tick(object sender, EventArgs e)
         {
             double newX = PhotoBitmap.Width/2 * Math.Sin(t + 5 * Math.PI / 2) + PhotoBitmap.Width/2;
@@ -309,6 +295,36 @@ namespace Filling
             t += 0.03;
             LVersor = new Vector3D(newX, newY, 100);
             Photo.Invalidate();
+        }
+
+        private void LoadNormalMapButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog choofdlog = new OpenFileDialog();
+            choofdlog.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+            choofdlog.FilterIndex = 1;
+            choofdlog.Multiselect = false;
+
+            if (choofdlog.ShowDialog() == DialogResult.OK)
+            {
+                NormalMapBitmap = new Bitmap(choofdlog.FileName);
+                InitializeMapAndPhoto();
+                Photo.Invalidate();
+            }
+        }
+
+        private void LoadImageButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog choofdlog = new OpenFileDialog();
+            choofdlog.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+            choofdlog.FilterIndex = 1;
+            choofdlog.Multiselect = false;
+
+            if (choofdlog.ShowDialog() == DialogResult.OK)
+            {
+                PhotoBitmap = new Bitmap(choofdlog.FileName);
+                InitializeMapAndPhoto();
+                Photo.Invalidate();
+            }
         }
     }
     #endregion
