@@ -15,6 +15,8 @@ namespace Filling
 {
     public partial class MainForm : Form
     {
+        enum PaintMode {Normal, Interpolate, HybridInterpolate};
+
         List<Triangle> triangles = null;
         bool isVertexMoving = false;
         Color constColor = Color.White;
@@ -29,6 +31,7 @@ namespace Filling
         Bitmap testBitmap = new Bitmap(Resources.Spiderman);
         Vector3D LVersor = new Vector3D(Resources.Spiderman.Width/2, Resources.Spiderman.Height/2, 100);
         double t = 1;
+        PaintMode current_mode = PaintMode.Normal;
 
         public MainForm()
         {
@@ -45,9 +48,9 @@ namespace Filling
             normalMap = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
             newPhoto = new Color[PhotoBitmap.Width, PhotoBitmap.Height];
 
-            for (int i=1; i<PhotoBitmap.Width; i++)
+            for (int i=0; i<PhotoBitmap.Width; i++)
             {
-                for(int j=1; j<PhotoBitmap.Height; j++)
+                for(int j=0; j<PhotoBitmap.Height; j++)
                 {
                     photo[i,j] = PhotoBitmap.GetPixel(i,j);
                 }
@@ -64,14 +67,26 @@ namespace Filling
 
         private void Photo_Paint(object sender, PaintEventArgs e)
         {
-            //e.Graphics.DrawImage(PhotoBitmap, new Point(0,0));
+            e.Graphics.DrawImage(PhotoBitmap, new Point(0,0));
 
             Graphics g = e.Graphics;
 
-            Parallel.ForEach(triangles, (triangle) =>
+            if(current_mode == PaintMode.Normal)
             {
-                FillPolygon(triangle.GetEdges(), triangle.kd, triangle.ks, triangle.m);
-            });
+                Parallel.ForEach(triangles, (triangle) =>
+                {
+                    FillPolygonNormal(triangle.GetEdges(), triangle.kd, triangle.ks, triangle.m);
+                });
+            }
+            if(current_mode == PaintMode.Interpolate)
+            {
+                Parallel.ForEach(triangles, (triangle) =>
+                {
+                    FillPolygonInterpolate(triangle, triangle.kd, triangle.ks, triangle.m);
+                });
+            }
+
+
 
             using (Bitmap processedBitmap = new Bitmap(PhotoBitmap.Width, PhotoBitmap.Height))
             {
@@ -101,6 +116,9 @@ namespace Filling
                 g.DrawImage(processedBitmap, 0, 0);
             }
             WaitLabel.Visible = false;
+
+            if(triangles.Count < 100)
+                DrawTrianglesNest(e.Graphics);
         }
 
         private List<Triangle> GenerateTriangles(int N, int M)
@@ -184,7 +202,109 @@ namespace Filling
             isVertexMoving = false;
         }
 
-        private void FillPolygon(List<Edge> edges,double kd, double ks, double m)
+        private void FillPolygonInterpolate(Triangle triangle, double kd, double ks, double m)
+        {
+            List<Edge> edges = triangle.GetEdges();
+            List<Edge>[] ET = EdgeBucketSort(edges);
+            int edgesCounter = edges.Count;
+            int y = 0;
+            while (ET[y] == null)
+                y++;
+
+            List<(double yMax, double xMin, double m)> AET = new List<(double, double, double)>();
+
+            List<(Point, Color)> triangle_vertex = new List<(Point, Color)>();
+            for(int i=0; i<3; i++)
+            {
+                Point p;
+                if (i == 0) p = triangle.p1;
+                else if (i == 1) p = triangle.p2;
+                else p = triangle.p3;
+
+                Color objectColor = constColor;
+                if (isColorFromTexture)
+                    objectColor = photo[p.X, p.Y];
+
+                Vector3D normalVector = new Vector3D(0, 0, 1);
+                if (isNormalVectorFromMap)
+                    normalVector = FromNormalMapToVector(normalMap[p.X, p.Y]);
+
+                Vector3D newL = CalculateLVector(new Vector3D(p.X, p.Y, 0));
+
+                int R = (int)GetLambertColor(((double)lightColor.R / (double)255), objectColor.R, newL, normalVector, ks, kd, m);
+                int G = (int)GetLambertColor(((double)lightColor.G / (double)255), objectColor.G, newL, normalVector, ks, kd, m);
+                int B = (int)GetLambertColor(((double)lightColor.B / (double)255), objectColor.B, newL, normalVector, ks, kd, m);
+
+                FixRGB(ref R, ref G, ref B);
+
+                Color newColor = Color.FromArgb(R, G, B);
+
+                triangle_vertex.Add((p, newColor));
+            }
+
+            double area = CalculateTriangleArea(triangle.p1, triangle.p2, triangle.p3);
+
+            while (edgesCounter != 0 || AET.Any())
+            {
+                AET.RemoveAll(x => x.yMax == y);
+
+                if (ET[y] != null)
+                {
+                    foreach (Edge edge in ET[y])
+                    {
+                        double mx = ((double)edge.p2.X - (double)edge.p1.X) / ((double)edge.p2.Y - (double)edge.p1.Y);
+
+                        if (edge.p1.Y != edge.p2.Y)
+                            AET.Add((edge.p2.Y, edge.p1.X, mx));
+
+                        edgesCounter--;
+                    }
+                }
+
+                AET.Sort((a, b) => a.xMin.CompareTo(b.xMin));
+
+                for (int i = 0; i < AET.Count; i += 2)
+                {
+                    for (int j = (int)(AET[i].xMin); j < (int)(AET[i + 1].xMin); j++)
+                    {
+                        Color newColor = CalculateInterpolateColor(area, triangle_vertex, j, y);
+
+                        //graph.FillRectangle(new SolidBrush(newColor), j, y, 1, 1);
+                        //testBitmap.SetPixel(j, y, newColor);
+                        newPhoto[j, y] = newColor;
+                    }
+                }
+
+                y++;
+
+                for (int i = 0; i < AET.Count; i++)
+                {
+                    AET[i] = (AET[i].yMax, AET[i].xMin + AET[i].m, AET[i].m);
+                }
+            }
+        }
+
+        private Color CalculateInterpolateColor(double area, List<(Point p, Color c)> vertex, int x, int y)
+        {
+            double alfa = CalculateTriangleArea(new Point(x, y), vertex[1].p, vertex[2].p)/area;
+            double beta = CalculateTriangleArea(new Point(x, y), vertex[0].p, vertex[2].p) / area;
+            double gamma = CalculateTriangleArea(new Point(x, y), vertex[0].p, vertex[1].p) / area;
+
+            int R = (int)(alfa * vertex[0].c.R + beta * vertex[1].c.R + gamma * vertex[2].c.R);
+            int G = (int)(alfa * vertex[0].c.G + beta * vertex[1].c.G + gamma * vertex[2].c.G);
+            int B = (int)(alfa * vertex[0].c.B + beta * vertex[1].c.B + gamma * vertex[2].c.B);
+
+            FixRGB(ref R, ref G, ref B);
+
+            return Color.FromArgb(R, G, B);
+        }
+
+        private double CalculateTriangleArea(Point p1, Point p2, Point p3)
+        {
+            return Math.Abs((p1.X * (p2.Y - p3.Y) + p2.X * (p3.Y - p1.Y) + p3.X * (p1.Y - p2.Y)) / 2);
+        }
+
+        private void FillPolygonNormal(List<Edge> edges,double kd, double ks, double m)
         {
             List<Edge>[] ET = EdgeBucketSort(edges);
             int edgesCounter = edges.Count;
@@ -332,6 +452,11 @@ namespace Filling
 
         private void ChangeCoefficients()
         {
+            int mNest = int.Parse(MText.Text);
+            int nNest = int.Parse(NText.Text);
+
+            triangles = GenerateTriangles(nNest, mNest);
+
             if(CoefficientSameValueRadioButton.Checked)
             {
                 double kd = kTrackBar.Value * 0.01;
@@ -352,6 +477,19 @@ namespace Filling
             else
             {
                 LightTimer.Start();
+            }
+
+            if(PreciselyFillRadioButton.Checked)
+            {
+                current_mode = PaintMode.Normal;
+            }
+            else if(InterpolationFillRadioButton.Checked)
+            {
+                current_mode = PaintMode.Interpolate;
+            }
+            else if(HybridFillRadioButton.Checked)
+            {
+                current_mode = PaintMode.HybridInterpolate;
             }
 
             isColorFromTexture = TextureColorRadioButton.Checked;

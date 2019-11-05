@@ -67,6 +67,10 @@
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
             this.ImageBrowserDialog = new System.Windows.Forms.OpenFileDialog();
             this.LightTimer = new System.Windows.Forms.Timer(this.components);
+            this.NestSizeLabel = new System.Windows.Forms.Label();
+            this.MText = new System.Windows.Forms.TextBox();
+            this.NText = new System.Windows.Forms.TextBox();
+            this.XLabel = new System.Windows.Forms.Label();
             this.MainTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Photo)).BeginInit();
             this.MenuPanel.SuspendLayout();
@@ -111,6 +115,10 @@
             // MenuPanel
             // 
             this.MenuPanel.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.MenuPanel.Controls.Add(this.XLabel);
+            this.MenuPanel.Controls.Add(this.NText);
+            this.MenuPanel.Controls.Add(this.MText);
+            this.MenuPanel.Controls.Add(this.NestSizeLabel);
             this.MenuPanel.Controls.Add(this.WaitLabel);
             this.MenuPanel.Controls.Add(this.LightColor);
             this.MenuPanel.Controls.Add(this.LightColorLabel);
@@ -131,7 +139,7 @@
             // 
             this.WaitLabel.AutoSize = true;
             this.WaitLabel.ForeColor = System.Drawing.Color.Red;
-            this.WaitLabel.Location = new System.Drawing.Point(78, 698);
+            this.WaitLabel.Location = new System.Drawing.Point(78, 766);
             this.WaitLabel.Name = "WaitLabel";
             this.WaitLabel.Size = new System.Drawing.Size(141, 13);
             this.WaitLabel.TabIndex = 17;
@@ -205,7 +213,7 @@
             // 
             // SubmitButton
             // 
-            this.SubmitButton.Location = new System.Drawing.Point(123, 672);
+            this.SubmitButton.Location = new System.Drawing.Point(131, 740);
             this.SubmitButton.Name = "SubmitButton";
             this.SubmitButton.Size = new System.Drawing.Size(75, 23);
             this.SubmitButton.TabIndex = 14;
@@ -485,6 +493,41 @@
             this.LightTimer.Interval = 200;
             this.LightTimer.Tick += new System.EventHandler(this.LightTimer_Tick);
             // 
+            // NestSizeLabel
+            // 
+            this.NestSizeLabel.AutoSize = true;
+            this.NestSizeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.NestSizeLabel.Location = new System.Drawing.Point(7, 683);
+            this.NestSizeLabel.Name = "NestSizeLabel";
+            this.NestSizeLabel.Size = new System.Drawing.Size(106, 16);
+            this.NestSizeLabel.TabIndex = 18;
+            this.NestSizeLabel.Text = "Rozmiar siatki";
+            // 
+            // MText
+            // 
+            this.MText.Location = new System.Drawing.Point(131, 679);
+            this.MText.Name = "MText";
+            this.MText.Size = new System.Drawing.Size(26, 20);
+            this.MText.TabIndex = 19;
+            this.MText.Text = "6";
+            // 
+            // NText
+            // 
+            this.NText.Location = new System.Drawing.Point(172, 679);
+            this.NText.Name = "NText";
+            this.NText.Size = new System.Drawing.Size(26, 20);
+            this.NText.TabIndex = 20;
+            this.NText.Text = "8";
+            // 
+            // XLabel
+            // 
+            this.XLabel.AutoSize = true;
+            this.XLabel.Location = new System.Drawing.Point(159, 684);
+            this.XLabel.Name = "XLabel";
+            this.XLabel.Size = new System.Drawing.Size(12, 13);
+            this.XLabel.TabIndex = 21;
+            this.XLabel.Text = "x";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -555,6 +598,10 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.OpenFileDialog ImageBrowserDialog;
         private System.Windows.Forms.Timer LightTimer;
+        private System.Windows.Forms.Label XLabel;
+        private System.Windows.Forms.TextBox NText;
+        private System.Windows.Forms.TextBox MText;
+        private System.Windows.Forms.Label NestSizeLabel;
     }
 }
 

@@ -36,6 +36,17 @@ namespace Filling
 
             return result;
         }
+
+        public List<Point> GetVertex()
+        {
+            List<Point> result = new List<Point>();
+
+            result.Add(p1);
+            result.Add(p2);
+            result.Add(p3);
+
+            return result;
+        }
     }
 
     public static class Extension
