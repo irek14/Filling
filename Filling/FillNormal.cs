@@ -55,6 +55,8 @@ namespace Filling
                         Vector3D normalVector = new Vector3D(0, 0, 1);
                         if (isNormalVectorFromMap)
                             normalVector = FromNormalMapToVector(normalMap[j, y]);
+                        else if(isNormalVectorFromBubble)
+                            normalVector = GetNormalVectorFromBubble(j, y);
 
                         Vector3D newL = CalculateLVector(new Vector3D(j, y, 0));
 
@@ -78,6 +80,22 @@ namespace Filling
                 }
             }
         }
+
+        private Vector3D GetNormalVectorFromBubble(int x, int y)
+        {
+            double d = Math.Sqrt((x - mousePosition.X) * (x - mousePosition.X) + (y - mousePosition.Y) * (y - mousePosition.Y));
+            if(d > bubbleR)
+            {
+                return new Vector3D(0,0,1);
+            }
+
+            double h = Math.Sqrt(bubbleR * bubbleR - d*d);
+            Vector3D vector = new Vector3D((x - mousePosition.X), (y - mousePosition.Y), h);
+            vector.Normalize();
+
+            return vector;
+        }
+
         private double CalculateTriangleArea(Point p1, Point p2, Point p3)
         {
             return Math.Abs((p1.X * (p2.Y - p3.Y) + p2.X * (p3.Y - p1.Y) + p3.X * (p1.Y - p2.Y)) / 2);
@@ -108,7 +126,13 @@ namespace Filling
 
             Vector3D R = 2 * (N * L) * N - L;
 
-            double result = kd * lightColor * objectColor * (N * L) + ks * lightColor * objectColor * Math.Pow(V * R, m);
+            double firstCosinus = kd * lightColor * objectColor * (N * L);
+            if (firstCosinus < 0) firstCosinus = 0;
+
+            double secondCosinus = ks * lightColor * objectColor * Math.Pow(V * R, m);
+            if (secondCosinus < 0) secondCosinus = 0;
+
+            double result = firstCosinus + secondCosinus;
 
             return result;
         }

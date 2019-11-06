@@ -25,17 +25,20 @@ namespace Filling
         bool isColorFromTexture = true;
         Color lightColor = Color.FromArgb(255, 255, 255);
         bool isNormalVectorFromMap = true;
+        bool isNormalVectorFromBubble = false;
         Color[,] photo;
         Color[,] normalMap;
         Color[,] newPhoto;
         Bitmap PhotoBitmap = new Bitmap(Resources.Spiderman);
         Bitmap NormalMapBitmap = new Bitmap(Resources.NormalMap);
         Bitmap testBitmap = new Bitmap(Resources.Spiderman);
-        Vector3D LVersor = new Vector3D(Resources.Spiderman.Width/2, Resources.Spiderman.Height/2, 1000);
+        Vector3D LVersor = new Vector3D(Resources.Spiderman.Width/2, Resources.Spiderman.Height/2, 10000);
         double t = 1;
-        int lightZ = 100;
+        int lightZ = 500;
         int deltaZ = 10;
         PaintMode current_mode = PaintMode.Normal;
+        Point mousePosition = new Point(-1,-1);
+        double bubbleR = 150;
 
         public MainForm()
         {
@@ -193,6 +196,13 @@ namespace Filling
                 MoveVertex(new Point(e.Location.X, e.Location.Y));
                 Photo.Invalidate();
             }
+
+            if(isNormalVectorFromBubble)
+            {
+                mousePosition = new Point(e.X, e.Y);
+                Photo.Invalidate();
+            }
+
         }
 
         private void Photo_MouseDown(object sender, MouseEventArgs e)
@@ -280,6 +290,7 @@ namespace Filling
 
             isColorFromTexture = TextureColorRadioButton.Checked;
             isNormalVectorFromMap = NFromTextureRadioButton.Checked;
+            isNormalVectorFromBubble = BubbleRadioButton.Checked;
             lightColor = LightColor.BackColor;
         }
 
@@ -296,8 +307,8 @@ namespace Filling
             double newY = PhotoBitmap.Height/2 * Math.Sin(4 * t) + PhotoBitmap.Height/2;
             t += 0.03;
             lightZ += deltaZ;
-            if (lightZ == 250) deltaZ *= -1;
-            if (lightZ == 40) deltaZ *= -1;
+            if (lightZ == 550) deltaZ *= -1;
+            if (lightZ == 120) deltaZ *= -1;
             LVersor = new Vector3D(newX, newY, lightZ);
             Photo.Invalidate();
         }

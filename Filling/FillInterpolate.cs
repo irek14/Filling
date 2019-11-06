@@ -41,6 +41,8 @@ namespace Filling
                 Vector3D normalVector = new Vector3D(0, 0, 1);
                 if (isNormalVectorFromMap)
                     normalVector = FromNormalMapToVector(normalMap[p.X, p.Y]);
+                else if (isNormalVectorFromBubble)
+                    normalVector = GetNormalVectorFromBubble(p.X, p.Y);
 
                 Vector3D newL = CalculateLVector(new Vector3D(p.X, p.Y, 0));
 

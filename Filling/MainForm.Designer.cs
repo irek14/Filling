@@ -47,6 +47,7 @@
             this.SubmitButton = new System.Windows.Forms.Button();
             this.FillColorLabel = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.ksTrackBar = new System.Windows.Forms.TrackBar();
             this.CoefficientRandomRadioButton = new System.Windows.Forms.RadioButton();
             this.CoefficientSameValueRadioButton = new System.Windows.Forms.RadioButton();
             this.mTrackBar = new System.Windows.Forms.TrackBar();
@@ -60,6 +61,7 @@
             this.InterpolationFillRadioButton = new System.Windows.Forms.RadioButton();
             this.PreciselyFillRadioButton = new System.Windows.Forms.RadioButton();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.LoadNormalMapButton = new System.Windows.Forms.Button();
             this.NConstRadioButton = new System.Windows.Forms.RadioButton();
             this.NFromTextureRadioButton = new System.Windows.Forms.RadioButton();
             this.NVectorLabel = new System.Windows.Forms.Label();
@@ -72,19 +74,18 @@
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
             this.ImageBrowserDialog = new System.Windows.Forms.OpenFileDialog();
             this.LightTimer = new System.Windows.Forms.Timer(this.components);
-            this.LoadNormalMapButton = new System.Windows.Forms.Button();
-            this.ksTrackBar = new System.Windows.Forms.TrackBar();
+            this.BubbleRadioButton = new System.Windows.Forms.RadioButton();
             this.MainTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Photo)).BeginInit();
             this.MenuPanel.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ksTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.kdTrackBar)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ksTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTable
@@ -286,6 +287,20 @@
             this.panel4.Size = new System.Drawing.Size(198, 220);
             this.panel4.TabIndex = 6;
             // 
+            // ksTrackBar
+            // 
+            this.ksTrackBar.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.ksTrackBar.LargeChange = 20;
+            this.ksTrackBar.Location = new System.Drawing.Point(28, 83);
+            this.ksTrackBar.Maximum = 100;
+            this.ksTrackBar.Name = "ksTrackBar";
+            this.ksTrackBar.Size = new System.Drawing.Size(137, 45);
+            this.ksTrackBar.SmallChange = 5;
+            this.ksTrackBar.TabIndex = 14;
+            this.ksTrackBar.TickFrequency = 5;
+            this.ksTrackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.ksTrackBar.Value = 50;
+            // 
             // CoefficientRandomRadioButton
             // 
             this.CoefficientRandomRadioButton.AutoSize = true;
@@ -416,6 +431,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.BubbleRadioButton);
             this.panel2.Controls.Add(this.LoadNormalMapButton);
             this.panel2.Controls.Add(this.NConstRadioButton);
             this.panel2.Controls.Add(this.NFromTextureRadioButton);
@@ -424,6 +440,16 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(200, 100);
             this.panel2.TabIndex = 5;
+            // 
+            // LoadNormalMapButton
+            // 
+            this.LoadNormalMapButton.Location = new System.Drawing.Point(105, 19);
+            this.LoadNormalMapButton.Name = "LoadNormalMapButton";
+            this.LoadNormalMapButton.Size = new System.Drawing.Size(75, 23);
+            this.LoadNormalMapButton.TabIndex = 6;
+            this.LoadNormalMapButton.Text = "Załaduj";
+            this.LoadNormalMapButton.UseVisualStyleBackColor = true;
+            this.LoadNormalMapButton.Click += new System.EventHandler(this.LoadNormalMapButton_Click);
             // 
             // NConstRadioButton
             // 
@@ -534,29 +560,15 @@
             this.LightTimer.Interval = 333;
             this.LightTimer.Tick += new System.EventHandler(this.LightTimer_Tick);
             // 
-            // LoadNormalMapButton
+            // BubbleRadioButton
             // 
-            this.LoadNormalMapButton.Location = new System.Drawing.Point(105, 19);
-            this.LoadNormalMapButton.Name = "LoadNormalMapButton";
-            this.LoadNormalMapButton.Size = new System.Drawing.Size(75, 23);
-            this.LoadNormalMapButton.TabIndex = 6;
-            this.LoadNormalMapButton.Text = "Załaduj";
-            this.LoadNormalMapButton.UseVisualStyleBackColor = true;
-            this.LoadNormalMapButton.Click += new System.EventHandler(this.LoadNormalMapButton_Click);
-            // 
-            // ksTrackBar
-            // 
-            this.ksTrackBar.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ksTrackBar.LargeChange = 20;
-            this.ksTrackBar.Location = new System.Drawing.Point(28, 83);
-            this.ksTrackBar.Maximum = 100;
-            this.ksTrackBar.Name = "ksTrackBar";
-            this.ksTrackBar.Size = new System.Drawing.Size(137, 45);
-            this.ksTrackBar.SmallChange = 5;
-            this.ksTrackBar.TabIndex = 14;
-            this.ksTrackBar.TickFrequency = 5;
-            this.ksTrackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.ksTrackBar.Value = 50;
+            this.BubbleRadioButton.AutoSize = true;
+            this.BubbleRadioButton.Location = new System.Drawing.Point(11, 65);
+            this.BubbleRadioButton.Name = "BubbleRadioButton";
+            this.BubbleRadioButton.Size = new System.Drawing.Size(64, 17);
+            this.BubbleRadioButton.TabIndex = 7;
+            this.BubbleRadioButton.Text = "Bąbelek";
+            this.BubbleRadioButton.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -577,6 +589,7 @@
             this.panel5.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ksTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.kdTrackBar)).EndInit();
             this.panel3.ResumeLayout(false);
@@ -585,7 +598,6 @@
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ksTrackBar)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -636,6 +648,7 @@
         private System.Windows.Forms.Label NestSizeLabel;
         private System.Windows.Forms.Button LoadNormalMapButton;
         private System.Windows.Forms.TrackBar ksTrackBar;
+        private System.Windows.Forms.RadioButton BubbleRadioButton;
     }
 }
 
